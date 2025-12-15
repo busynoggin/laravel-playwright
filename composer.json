@@ -1,5 +1,5 @@
 {
-    "name": "hyvor/laravel-playwright",
+    "name": "busynoggin/laravel-playwright",
     "description": "Laravel and Playwright E2E Testing",
     "keywords": ["laravel", "playwright", "testing", "e2e"],
     "type": "library",
@@ -21,7 +21,7 @@
         }
     ],
     "require": {
-        "php": ">=8.2"
+        "php": ">=8.0"
     },
     "require-dev": {
         "orchestra/testbench": "^9.0",

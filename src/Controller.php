@@ -19,7 +19,7 @@ class Controller
     {
 
         $command = (string) $request->string('command');
-        $parameters = (array) $request->input('parameters');
+        $parameters = (array) $request->string('parameters');
 
         $exitCode = Artisan::call($command, $parameters);
 
@@ -39,7 +39,7 @@ class Controller
         ]);
 
         /** @var array<string|null> $connections */
-        $connections = $request->input('connections') ?? [null];
+        $connections = $request->string('connections') ?? [null];
 
         $truncate = new Services\Truncate();
         $truncate->truncate($connections);
@@ -60,7 +60,7 @@ class Controller
         $modelClass = (string) $request->string('model');
         $count = $request->has('count') ? $request->integer('count') : null;
         /** @var array<string, mixed> $attrs */
-        $attrs = (array) $request->input('attrs');
+        $attrs = (array) $request->string('attrs');
 
         if (!class_exists($modelClass)) {
             $modelClass = 'App\\Models\\' . $modelClass;
@@ -108,7 +108,7 @@ class Controller
             null;
         $query = (string) $request->string('query');
         /** @var array<mixed> $bindings */
-        $bindings = $request->input('bindings', []);
+        $bindings = $request->string('bindings', []);
         $unprepared = $request->boolean('unprepared');
 
         $connection = DB::connection($connection);
@@ -136,7 +136,7 @@ class Controller
             null;
         $query = (string) $request->string('query');
         /** @var array<mixed> $bindings */
-        $bindings = $request->input('bindings', []);
+        $bindings = $request->string('bindings', []);
 
         $results = DB::connection($connection)->select($query, $bindings);
 
@@ -154,7 +154,7 @@ class Controller
 
         $function = (string) $request->string('function');
         /** @var array<mixed> $args */
-        $args = $request->input('args', []);
+        $args = $request->string('args', []);
 
         if (!is_callable($function))
             abort(422, 'Function does not exist');
@@ -173,7 +173,7 @@ class Controller
         ]);
 
         $key = (string) $request->string('key');
-        $value = $request->input('value');
+        $value = $request->string('value');
 
         DynamicConfig::set($key, $value);
 
