@@ -18,8 +18,8 @@ class Controller
     public function artisan(Request  $request) : JsonResponse
     {
 
-        $command = (string) $request->string('command');
-        $parameters = (array) $request->string('parameters');
+        $command = (string) $request->input('command');
+        $parameters = (array) $request->input('parameters');
 
         $exitCode = Artisan::call($command, $parameters);
 
@@ -39,7 +39,7 @@ class Controller
         ]);
 
         /** @var array<string|null> $connections */
-        $connections = $request->string('connections') ?? [null];
+        $connections = $request->input('connections') ?? [null];
 
         $truncate = new Services\Truncate();
         $truncate->truncate($connections);
@@ -57,10 +57,10 @@ class Controller
             'attrs' => 'array',
         ]);
 
-        $modelClass = (string) $request->string('model');
+        $modelClass = (string) $request->input('model');
         $count = $request->has('count') ? $request->integer('count') : null;
         /** @var array<string, mixed> $attrs */
-        $attrs = (array) $request->string('attrs');
+        $attrs = (array) $request->input('attrs');
 
         if (!class_exists($modelClass)) {
             $modelClass = 'App\\Models\\' . $modelClass;
@@ -104,11 +104,11 @@ class Controller
         ]);
 
         $connection = $request->has('connection') ?
-            (string) $request->string('connection') :
+            (string) $request->input('connection') :
             null;
-        $query = (string) $request->string('query');
+        $query = (string) $request->input('query');
         /** @var array<mixed> $bindings */
-        $bindings = $request->string('bindings', []);
+        $bindings = $request->input('bindings', []);
         $unprepared = $request->boolean('unprepared');
 
         $connection = DB::connection($connection);
@@ -132,11 +132,11 @@ class Controller
         ]);
 
         $connection = $request->has('connection') ?
-            (string) $request->string('connection') :
+            (string) $request->input('connection') :
             null;
-        $query = (string) $request->string('query');
+        $query = (string) $request->input('query');
         /** @var array<mixed> $bindings */
-        $bindings = $request->string('bindings', []);
+        $bindings = $request->input('bindings', []);
 
         $results = DB::connection($connection)->select($query, $bindings);
 
@@ -152,9 +152,9 @@ class Controller
             'args' => 'array'
         ]);
 
-        $function = (string) $request->string('function');
+        $function = (string) $request->input('function');
         /** @var array<mixed> $args */
-        $args = $request->string('args', []);
+        $args = $request->input('args', []);
 
         if (!is_callable($function))
             abort(422, 'Function does not exist');
@@ -172,8 +172,8 @@ class Controller
             'value' => 'required',
         ]);
 
-        $key = (string) $request->string('key');
-        $value = $request->string('value');
+        $key = (string) $request->input('key');
+        $value = $request->input('value');
 
         DynamicConfig::set($key, $value);
 
@@ -187,7 +187,7 @@ class Controller
             'function' => 'string|required',
         ]);
 
-        $function = (string) $request->string('function');
+        $function = (string) $request->input('function');
 
         if (!is_callable($function))
             abort(422, 'Function is not callable');
@@ -209,7 +209,7 @@ class Controller
             'to' => 'string|required',
         ]);
 
-        $to = (string) $request->string('to');
+        $to = (string) $request->input('to');
 
         try {
             Carbon::parse($to);
